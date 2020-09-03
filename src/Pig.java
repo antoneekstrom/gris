@@ -23,7 +23,7 @@ public class Pig {
     void program() {
         //test();                 // <-------------- Uncomment to run tests!
 
-        final int winPts = 3;    // Points to win (decrease if testing)
+        final int winPts = 20;    // Points to win (decrease if testing)
         Player[] players;         // The players (array of Player objects)
         Player current;            // Current player for round (must use)
         boolean aborted = false;   // Game aborted by player?
@@ -32,7 +32,6 @@ public class Pig {
         players = getPlayers();
 
         welcomeMsg(winPts);
-        statusMsg(players);
         current = getRandomPlayer(players);
 
         while (!aborted && !hasWon) {
@@ -40,6 +39,9 @@ public class Pig {
 
             switch (choice) {
                 default:
+                    out.println("Invalid choice!");
+                    commandsMsg();
+                    break;
                 case "r":
                     int diceNum = rollDice();
                     if (diceNum == 1) {
@@ -62,14 +64,13 @@ public class Pig {
                     }
 
                     current = next(players, current);
+                    statusMsg(players);
                     break;
 
                 case "q":
                     aborted = true;
                     break;
             }
-
-            statusMsg(players);
         }
 
         gameOverMsg(current, aborted);
@@ -87,11 +88,11 @@ public class Pig {
     }
 
     int rollDice() {
-        return (int)Math.round(Math.random() * 6);
+        return rand.nextInt(6) + 1;
     }
 
     Player getRandomPlayer(Player[] players) {
-        return players[(int)Math.round(Math.random() * (players.length - 1))];
+        return players[rand.nextInt(players.length)];
     }
 
     Player next(Player[] players, Player current) {
@@ -102,10 +103,14 @@ public class Pig {
     // ---- IO methods ------------------
 
     void welcomeMsg(int winPoints) {
-        out.println("Welcome to PIG!");
+        out.println("\nWelcome to PIG!");
         out.println("First player to get " + winPoints + " points will win!");
-        out.println("Commands are: r = roll , n = next, q = quit");
+        commandsMsg();
         out.println();
+    }
+
+    void commandsMsg() {
+        out.println("Commands are: r = roll , n = next, q = quit");
     }
 
     void statusMsg(Player[] players) {
@@ -134,7 +139,7 @@ public class Pig {
     }
 
     String getPlayerChoice(Player player) {
-        out.print("Player is " + player.name + " > ");
+        out.print("\nPlayer is " + player.name + " > ");
         return sc.next();
     }
 
