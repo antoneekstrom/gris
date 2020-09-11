@@ -21,7 +21,7 @@ public class Pig {
     final Random rand = new Random();
 
     void program() {
-        //test();                 // <-------------- Uncomment to run tests!
+        test();                 // <-------------- Uncomment to run tests!
 
         final int winPts = 20;    // Points to win (decrease if testing)
         Player[] players;         // The players (array of Player objects)
@@ -42,6 +42,7 @@ public class Pig {
                     out.println("Invalid choice!");
                     commandsMsg();
                     break;
+
                 case "r":
                     int diceNum = rollDice();
                     if (diceNum == 1) {
@@ -177,8 +178,35 @@ public class Pig {
         // This is hard coded test data
         // An array of (no name) Players (probably don't need any name to test)
         Player[] players = {new Player(), new Player(), new Player()};
+        Player current = getRandomPlayer(players);
 
-        // TODO Use for testing of logcial methods (i.e. non-IO methods)
+        // Tests for rollDice()
+        out.println("\nrollDice() Tests:");
+        for (int i = 0; i < 10; i++) {
+            int dice = rollDice();
+            out.println(1 <= dice && dice <= 6);
+        }
+
+        // Tests for next()
+        out.println("\nnext() Tests:");
+        for (int i = 0; i < 4; i++) {
+            out.println(next(players, current) != current);
+            current = next(players, current);
+        }
+
+        // Tests for checkWin()
+        out.println("\ncheckWin() Tests:");
+
+        out.println(!checkWin(players, 20));
+
+        players[0].totalPts = 20;
+
+        out.println(checkWin(players, 20));
+
+        players[0].totalPts = 30;
+
+        out.println(checkWin(players, 20));
+
 
         exit(0);   // End program
     }
